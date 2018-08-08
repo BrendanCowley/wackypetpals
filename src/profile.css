@@ -1,0 +1,13 @@
+.Border {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: gray;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.Pic {
+  height: 250px;
+  width: 250px;
+}
