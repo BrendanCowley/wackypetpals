@@ -8,32 +8,26 @@ export default class MyNavbar extends Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/" id="home">Home</NavLink>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
           <NavItem href="#">
-            <NavLink to="/cats">Cats</NavLink>
+            <NavLink to="/cats" id="cats">Cats</NavLink>
           </NavItem>
           <NavItem href="#">
-            <NavLink to="/dogs">Dogs</NavLink>
+            <NavLink to="/dogs" id="dogs">Dogs</NavLink>
           </NavItem>
-          <NavDropdown eventKey={3} title="Birds" id="basic-nav-dropdown">
-            <NavLink to="/birds">
-              <MenuItem>Angsty</MenuItem>
-              <MenuItem>Calm</MenuItem>
-              <MenuItem>Suck ups</MenuItem>
-              <MenuItem divider />
-            </NavLink>
-            {/* <MenuItem eventKey={3.3}>Separated Link</MenuItem> */}
-          </NavDropdown>
+          <NavItem href="#">
+            <NavLink to="/birds" id="birds">Birds</NavLink>
+          </NavItem>
           <NavItem>
-            <NavLink to="/advancedsearch">Advanced Search</NavLink>
+            <NavLink to="/advancedsearch" id="advancedSearch">Advanced Search</NavLink>
           </NavItem>
         </Nav>
         <Nav pullRight>
           <NavItem>
-            <NavLink to="/createprofile">Create Profile</NavLink>
+            <NavLink to="/finishedSignUp" id="createProfile">Create Profile</NavLink>
           </NavItem>
         </Nav>
       </Navbar>

@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-// import logo from "./logo.svg";
 import "./App.css";
-// import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
 import Home from "./home.js";
 import Animals from "./Animals";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch, HashRouter, Redirect } from "react-router-dom";
 import MyNavbar from "./Navbar.js";
 import AdvancedSearch from "./AdvancedSearch.js";
+import ProfileVerification from "./ProfileVerification";
 import CreateProfile from "./CreateProfile";
 import firebase from "./firebase.js";
 
@@ -29,15 +28,23 @@ class App extends Component {
           name: kids[kid].name,
           age: kids[kid].age,
           type: kids[kid].type,
-          picture: kids[kid].picture
+          picture: kids[kid].picture,
+          isValidated: kids[kid].isValidated
         });
       }
       this.setState({
         kids: newState.reverse()
       });
     });
+    console.log(document.URL)
   }
+  handleVerifyEmail = (auth,oobCode) => {
+    auth.applyActionCode(oobCode).then(function(resp){
 
+    }).catch(function(error) {
+      console.log(error)
+    })
+  }
   profileButton = childState => {
     if (childState.image == "") {
       childState.image =
@@ -53,7 +60,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <BrowserRouter>
+        <HashRouter>
           <div>
             <MyNavbar />
             <Switch>
@@ -101,9 +108,14 @@ class App extends Component {
                   />
                 )}
               />
+              <Route
+                path="/finishedSignUp"
+                render={props => (<ProfileVerification {...props} kids={this.state.kids} />)
+                }
+              />
             </Switch>
           </div>
-        </BrowserRouter>
+        </HashRouter>
       </div>
     );
   }

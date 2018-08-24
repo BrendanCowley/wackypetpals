@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./profile.css";
+import firebase from "./firebase.js";
+import { Redirect } from "react-router-dom";
 
 export default class CreateProfile extends Component {
   constructor(props) {
@@ -8,9 +10,48 @@ export default class CreateProfile extends Component {
       name: "",
       age: 0,
       type: "",
-      picture: "https://pawedin.com/system/pets/default_images/default_pet.jpg"
+      picture: "https://pawedin.com/system/pets/default_images/default_pet.jpg",
+      email: ""
     };
   }
+
+  componentDidMount(){
+
+    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+      var email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+          email = window.prompt('Please provide your email for confirmation');
+      }
+      if (!email) {
+        this.setState({
+          redirectHome: true
+        })
+        return
+      }
+      firebase.auth().signInWithEmailLink(email, window.location.href)
+      .then(function(result) {
+          window.localStorage.removeItem('emailForSignIn');
+      })
+      .then(() => (this.setState({
+        email: firebase.auth().currentUser.email
+      })))
+      .catch(function(error) {
+      console.log(error)
+      });
+    }
+    else if (firebase.auth().currentUser != undefined){
+      this.setState({
+        email: firebase.auth().currentUser.email
+      })
+      return
+    }
+    else{
+      this.setState({
+        redirect: true
+      })
+      return
+    }
+}
 
   handleNameChange = event => {
     this.setState({
@@ -53,6 +94,12 @@ export default class CreateProfile extends Component {
   };
 
   render() {
+    if (this.state.redirectHome) {
+      return <Redirect to ="/" />
+    }
+    if (this.state.redirect) {
+      return <Redirect to='/finishedSignUp' />;
+    }
     return (
       <div>
         <h1>
