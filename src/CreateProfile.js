@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "./profile.css";
 import firebase from "./firebase.js";
-import { Redirect } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
-export default class CreateProfile extends Component {
+class CreateProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,6 +13,9 @@ export default class CreateProfile extends Component {
       picture: "https://pawedin.com/system/pets/default_images/default_pet.jpg",
       email: ""
     };
+    if(firebase.auth().currentUser){
+      this.setState({email: firebase.auth().currentUser.email})
+    }
   }
 
   componentDidMount(){
@@ -29,7 +32,7 @@ export default class CreateProfile extends Component {
         return
       }
       firebase.auth().signInWithEmailLink(email, window.location.href)
-      .then(function(result) {
+      .then(result => {
           window.localStorage.removeItem('emailForSignIn');
       })
       .then(() => (this.setState({
@@ -76,7 +79,6 @@ export default class CreateProfile extends Component {
     var reader = new FileReader();
     reader.onload = e => {
       var picture = e.target.result;
-      console.log(picture);
       this.setState({
         picture
       });
@@ -98,7 +100,7 @@ export default class CreateProfile extends Component {
       return <Redirect to ="/" />
     }
     if (this.state.redirect) {
-      return <Redirect to='/finishedSignUp' />;
+      return <Redirect to='/signup' />;
     }
     return (
       <div>
@@ -109,26 +111,26 @@ export default class CreateProfile extends Component {
         <br />
         <p>
           Name:{" "}
-          <input value={this.state.name} onChange={this.handleNameChange} />
+          <input value={this.state.name} onChange={this.handleNameChange} id="profileName" />
         </p>
         <p>
           Age:{" "}
           <input
             type="number"
             value={this.state.age === 0 ? "" : this.state.age}
-            onChange={this.handleAgeChange}
+            onChange={this.handleAgeChange} id="profileAge"
           />
         </p>
         <p>
           Species:{" "}
-          <input value={this.state.type} onChange={this.handleTypeChange} />
+          <input value={this.state.type} onChange={this.handleTypeChange} id="profileType" />
         </p>
         <p>
           Upload Picture:{" "}
           <input
             type="file"
             accept="image/*"
-            onChange={this.handleImageChange}
+            onChange={this.handleImageChange} id="profilePic"
           />
         </p>
         <img src={this.state.picture} className="Pic" />
@@ -138,7 +140,7 @@ export default class CreateProfile extends Component {
           onClick={() => {
             this.props.profileButton(this.state);
             this.resetState();
-          }}
+          }} id="profileButton"
         >
           Create Profile
         </button>
@@ -146,3 +148,5 @@ export default class CreateProfile extends Component {
     );
   }
 }
+
+export default withRouter(CreateProfile);

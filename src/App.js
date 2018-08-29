@@ -36,7 +36,6 @@ class App extends Component {
         kids: newState.reverse()
       });
     });
-    console.log(document.URL)
   }
   handleVerifyEmail = (auth,oobCode) => {
     auth.applyActionCode(oobCode).then(function(resp){
@@ -109,7 +108,7 @@ class App extends Component {
                 )}
               />
               <Route
-                path="/finishedSignUp"
+                path="/signup"
                 render={props => (<ProfileVerification {...props} kids={this.state.kids} />)
                 }
               />

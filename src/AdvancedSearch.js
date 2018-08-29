@@ -46,7 +46,7 @@ export default class AdvancedSearch extends Component {
         "&type=" +
         this.state.type.toLowerCase() +
         "&age=" +
-        this.state.age
+        (this.state.age == "" ? 0 : this.state.age)
     );
   }
 
@@ -54,7 +54,7 @@ export default class AdvancedSearch extends Component {
     const values = queryString.parse(this.props.location.search);
     var searchProfiles = this.props.kids
       .filter(item => item.name.toLowerCase().includes(values.name))
-      .filter(item => item.type.includes(values.type))
+      .filter(item => item.type.toLowerCase().includes(values.type))
       .filter(
         item => item.age == parseInt(values.age) || parseInt(values.age) == ""
       );
@@ -63,13 +63,13 @@ export default class AdvancedSearch extends Component {
         <form onSubmit={this.handleSubmit}>
           <p>
             Name:{" "}
-            <input value={this.state.name} onChange={this.handleNameChange} />
+            <input value={this.state.name} onChange={this.handleNameChange} id="name" />
           </p>
 
           <br />
           <p>
             Type:{" "}
-            <input value={this.state.type} onChange={this.handleTypeChange} />
+            <input value={this.state.type} onChange={this.handleTypeChange} id="type" />
           </p>
 
           <br />
@@ -78,7 +78,7 @@ export default class AdvancedSearch extends Component {
             <input
               type="number"
               value={this.state.age === 0 ? "" : this.state.age}
-              onChange={this.handleAgeChange}
+              onChange={this.handleAgeChange} id="age"
             />
           </p>
           <button id="myBtn" type="submit">
@@ -89,7 +89,7 @@ export default class AdvancedSearch extends Component {
           <div>
             <div className="Border">
               <img src={item.picture} className="Pic" />
-              <p>
+              <p data-qa="profile">
                 name: {item.name}, age: {item.age}, type: {item.type}
               </p>
             </div>
