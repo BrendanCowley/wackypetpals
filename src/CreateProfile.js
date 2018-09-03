@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./profile.css";
 import firebase from "./firebase.js";
 import { Redirect, withRouter } from "react-router-dom";
+import "./CreateProfile.css";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -13,48 +14,49 @@ class CreateProfile extends Component {
       picture: "https://pawedin.com/system/pets/default_images/default_pet.jpg",
       email: ""
     };
-    if(firebase.auth().currentUser){
-      this.setState({email: firebase.auth().currentUser.email})
+    if (firebase.auth().currentUser) {
+      this.setState({ email: firebase.auth().currentUser.email });
     }
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
     if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-      var email = window.localStorage.getItem('emailForSignIn');
+      var email = window.localStorage.getItem("emailForSignIn");
       if (!email) {
-          email = window.prompt('Please provide your email for confirmation');
+        email = window.prompt("Please provide your email for confirmation");
       }
       if (!email) {
         this.setState({
           redirectHome: true
-        })
-        return
+        });
+        return;
       }
-      firebase.auth().signInWithEmailLink(email, window.location.href)
-      .then(result => {
-          window.localStorage.removeItem('emailForSignIn');
-      })
-      .then(() => (this.setState({
-        email: firebase.auth().currentUser.email
-      })))
-      .catch(function(error) {
-      console.log(error)
-      });
-    }
-    else if (firebase.auth().currentUser != undefined){
+      firebase
+        .auth()
+        .signInWithEmailLink(email, window.location.href)
+        .then(result => {
+          window.localStorage.removeItem("emailForSignIn");
+        })
+        .then(() =>
+          this.setState({
+            email: firebase.auth().currentUser.email
+          })
+        )
+        .catch(function(error) {
+          console.log(error);
+        });
+    } else if (firebase.auth().currentUser != undefined) {
       this.setState({
         email: firebase.auth().currentUser.email
-      })
-      return
-    }
-    else{
+      });
+      return;
+    } else {
       this.setState({
         redirect: true
-      })
-      return
+      });
+      return;
     }
-}
+  }
 
   handleNameChange = event => {
     this.setState({
@@ -97,50 +99,59 @@ class CreateProfile extends Component {
 
   render() {
     if (this.state.redirectHome) {
-      return <Redirect to ="/" />
+      return <Redirect to="/" />;
     }
     if (this.state.redirect) {
-      return <Redirect to='/signup' />;
+      return <Redirect to="/signup" />;
     }
     return (
-      <div>
+      <div className="stylez">
         <h1>
           <u>Create Profile!</u>
         </h1>
         <br />
         <br />
-        <p>
-          Name:{" "}
-          <input value={this.state.name} onChange={this.handleNameChange} id="profileName" />
-        </p>
-        <p>
-          Age:{" "}
+        <div className="grid-container3">
+          <p>Name: </p>
+          <input
+            value={this.state.name}
+            onChange={this.handleNameChange}
+            id="profileName"
+          />
+
+          <p>Age: </p>
           <input
             type="number"
             value={this.state.age === 0 ? "" : this.state.age}
-            onChange={this.handleAgeChange} id="profileAge"
+            onChange={this.handleAgeChange}
+            id="profileAge"
           />
-        </p>
-        <p>
-          Species:{" "}
-          <input value={this.state.type} onChange={this.handleTypeChange} id="profileType" />
-        </p>
-        <p>
-          Upload Picture:{" "}
+
+          <p>Species: </p>
+          <input
+            value={this.state.type}
+            onChange={this.handleTypeChange}
+            id="profileType"
+          />
+
+          <p>Upload Picture: </p>
           <input
             type="file"
             accept="image/*"
-            onChange={this.handleImageChange} id="profilePic"
+            onChange={this.handleImageChange}
+            id="profilePic"
           />
-        </p>
-        <img src={this.state.picture} className="Pic" />
+
+          <img src={this.state.picture} className="Pic" />
+        </div>
         <br />
         <button
           type="submit"
           onClick={() => {
             this.props.profileButton(this.state);
             this.resetState();
-          }} id="profileButton"
+          }}
+          id="profileButton"
         >
           Create Profile
         </button>

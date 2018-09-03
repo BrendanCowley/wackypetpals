@@ -13,31 +13,27 @@ export default class AdvancedSearch extends Component {
       type: "",
       age: 0
     };
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleTypeChange = this.handleTypeChange.bind(this);
-    this.handleAgeChange = this.handleAgeChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleNameChange(event) {
+  handleNameChange = event => {
     this.setState({
       name: event.target.value
     });
-  }
+  };
 
-  handleTypeChange(event) {
+  handleTypeChange = event => {
     this.setState({
       type: event.target.value
     });
-  }
+  };
 
-  handleAgeChange(event) {
+  handleAgeChange = event => {
     this.setState({
       age: event.target.value
     });
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     this.props.history.push(
       "/advancedsearch?" +
@@ -48,7 +44,7 @@ export default class AdvancedSearch extends Component {
         "&age=" +
         (this.state.age == "" ? 0 : this.state.age)
     );
-  }
+  };
 
   render() {
     const values = queryString.parse(this.props.location.search);
@@ -60,31 +56,35 @@ export default class AdvancedSearch extends Component {
       );
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            Name:{" "}
-            <input value={this.state.name} onChange={this.handleNameChange} id="name" />
-          </p>
+        <form onSubmit={this.handleSubmit} className="grid-container">
+          <p>Name: </p>
 
-          <br />
-          <p>
-            Type:{" "}
-            <input value={this.state.type} onChange={this.handleTypeChange} id="type" />
-          </p>
+          <input
+            value={this.state.name}
+            onChange={this.handleNameChange}
+            id="name"
+          />
 
-          <br />
-          <p>
-            Age:{" "}
-            <input
-              type="number"
-              value={this.state.age === 0 ? "" : this.state.age}
-              onChange={this.handleAgeChange} id="age"
-            />
-          </p>
+          <p>Type: </p>
+          <input
+            value={this.state.type}
+            onChange={this.handleTypeChange}
+            id="type"
+          />
+
+          <p>Age: </p>
+          <input
+            type="number"
+            value={this.state.age === 0 ? "" : this.state.age}
+            onChange={this.handleAgeChange}
+            id="age"
+          />
+
           <button id="myBtn" type="submit">
             Search!
           </button>
         </form>
+        <hr />
         {searchProfiles.map(item => (
           <div>
             <div className="Border">

@@ -8,6 +8,7 @@ import AdvancedSearch from "./AdvancedSearch.js";
 import ProfileVerification from "./ProfileVerification";
 import CreateProfile from "./CreateProfile";
 import firebase from "./firebase.js";
+import MyProfiles from "./MyProfiles";
 
 class App extends Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class App extends Component {
       kids: []
     };
     this.profileButton = this.profileButton.bind(this);
+    var storage = firebase.storage();
+    var accounts = storage.ref();
   }
 
   componentDidMount() {
@@ -29,7 +32,9 @@ class App extends Component {
           age: kids[kid].age,
           type: kids[kid].type,
           picture: kids[kid].picture,
-          isValidated: kids[kid].isValidated
+          isValidated: kids[kid].isValidated,
+          email: kids[kid].email,
+          reference: kid
         });
       }
       this.setState({
@@ -37,13 +42,14 @@ class App extends Component {
       });
     });
   }
-  handleVerifyEmail = (auth,oobCode) => {
-    auth.applyActionCode(oobCode).then(function(resp){
-
-    }).catch(function(error) {
-      console.log(error)
-    })
-  }
+  handleVerifyEmail = (auth, oobCode) => {
+    auth
+      .applyActionCode(oobCode)
+      .then(function(resp) {})
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
   profileButton = childState => {
     if (childState.image == "") {
       childState.image =
@@ -109,8 +115,15 @@ class App extends Component {
               />
               <Route
                 path="/signup"
-                render={props => (<ProfileVerification {...props} kids={this.state.kids} />)
-                }
+                render={props => (
+                  <ProfileVerification {...props} kids={this.state.kids} />
+                )}
+              />
+              <Route
+                path="/myprofiles"
+                render={props => (
+                  <MyProfiles {...props} kids={this.state.kids} />
+                )}
               />
             </Switch>
           </div>

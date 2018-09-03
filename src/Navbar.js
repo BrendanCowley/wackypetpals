@@ -1,7 +1,17 @@
 import React, { Component } from "react";
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  NavItem,
+  MenuItem,
+  NavDropdown,
+  Grid,
+  Row,
+  Col
+} from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import firebase from "./firebase.js";
+import "./Navbar.css";
 
 export default class MyNavbar extends Component {
   constructor(props) {
@@ -49,6 +59,18 @@ export default class MyNavbar extends Component {
           });
   };
 
+  dropdownToggle = newValue => {
+    if (this._forceOpen) {
+      this.setState({ menuOpen: true });
+      this._forceOpen = false;
+    } else {
+      this.setState({ menuOpen: newValue });
+    }
+  };
+  menuItemClickedThatShouldntCloseDropdown = () => {
+    this._forceOpen = true;
+  };
+
   render() {
     return (
       <Navbar id="navbar">
@@ -81,40 +103,63 @@ export default class MyNavbar extends Component {
             </NavLink>
           </NavItem>
         </Nav>
-        <Nav pullRight>
-          {!firebase.auth().currentUser ? (
-            <div>
-              <NavItem>
-                Sign In: Email:{" "}
-                <input
-                  value={this.state.email}
-                  onChange={this.handleEmailChange}
-                  type="email"
-                  id="signInEmail"
-                />
-                Password:
-                <input
-                  value={this.state.password}
-                  onChange={this.handlePasswordChange}
-                  type="password"
-                  id="signInPassword"
-                />
-                <button
-                  type="submit"
-                  onClick={this.handleClick}
-                  id="signInButton"
-                >
-                  {" "}
-                  Log in
-                </button>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/signup" id="signup">
-                  Sign Up
-                </NavLink>
-              </NavItem>
-            </div>
-          ) : (
+        {!firebase.auth().currentUser ? (
+          <Nav pullRight>
+            <NavDropdown
+              eventKey={3}
+              title="Sign In"
+              open={this.state.menuOpen}
+              onToggle={val => this.dropdownToggle(val)}
+              id="signInDropdown"
+            >
+              <MenuItem
+                eventKey={3.1}
+                onClick={() => this.menuItemClickedThatShouldntCloseDropdown()}
+              >
+                <div className="grid-container">
+                  Email:{" "}
+                  <input
+                    value={this.state.email}
+                    onChange={this.handleEmailChange}
+                    type="email"
+                    id="signInEmail"
+                  />
+                  Password:{" "}
+                  <input
+                    value={this.state.password}
+                    onChange={this.handlePasswordChange}
+                    type="password"
+                    id="signInPassword"
+                  />
+                  <button
+                    type="submit"
+                    onClick={this.handleClick}
+                    id="signInButton"
+                    style={{ backgroundColor: "white" }}
+                  >
+                    Log in
+                  </button>
+                </div>
+              </MenuItem>
+            </NavDropdown>
+            <NavItem>
+              <NavLink to="/signup" id="signup">
+                Sign Up
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/createprofile" id="createProfile">
+                Create Profile
+              </NavLink>
+            </NavItem>
+          </Nav>
+        ) : (
+          <Nav pullRight>
+            <NavItem>
+              <NavLink to="/myprofiles" id="myprofiles">
+                My Profiles
+              </NavLink>
+            </NavItem>
             <NavItem>
               <button
                 type="submit"
@@ -125,13 +170,13 @@ export default class MyNavbar extends Component {
                 Sign Out
               </button>
             </NavItem>
-          )}
-          <NavItem>
-            <NavLink to="/createprofile" id="createProfile">
-              Create Profile
-            </NavLink>
-          </NavItem>
-        </Nav>
+            <NavItem>
+              <NavLink to="/createprofile" id="createProfile">
+                Create Profile
+              </NavLink>
+            </NavItem>
+          </Nav>
+        )}
       </Navbar>
     );
   }

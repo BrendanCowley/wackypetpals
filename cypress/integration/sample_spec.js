@@ -33,6 +33,8 @@ describe("Components render as intended", function() {
 
   it("should sign in allow create profile page to be rendered when signed in", function() {
     cy.visit("http://localhost:3000/");
+    cy.get("#signInDropdown").click();
+    cy.get("#signInEmail").should("be.visible");
     cy.get("#signInEmail").type("fake@fake.com");
     cy.get("#signInPassword").type("password");
     cy.get("#signInButton").click();

@@ -1,0 +1,18 @@
+.grid-container {
+  display: grid;
+  grid-row-gap: 5px;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+button {
+  background-color: #f8f8f8;
+  border: none;
+  border-radius: 2px;
+  color: #4682b4;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}

@@ -29,3 +29,11 @@
     transform: rotate(360deg);
   }
 }
+
+.Profile {
+  text-align: left;
+}
+
+.Home .body {
+  text-align: left;
+}

@@ -1,0 +1,11 @@
+.stylez {
+  margin-left: 2%;
+}
+
+.grid-container3 {
+  display: grid;
+  grid-row-gap: 5px;
+  grid-template-columns: 33% 50%;
+  grid-column-gap: 1px;
+  width: 33%;
+}
